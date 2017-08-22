@@ -1,0 +1,4 @@
+{
+  "presets": ["react", "env"],
+  "plugins": ["react-html-attrs", "transform-decorators-legacy", "transform-class-properties", "transform-object-rest-spread", "transform-runtime"]
+}

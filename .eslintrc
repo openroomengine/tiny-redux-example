@@ -1,0 +1,17 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module",
+  },
+  "extends": ["standard", "plugin:react/recommended"],
+  "rules": {
+    "react/prop-types": 0,
+    "comma-dangle": ["error", "always-multiline"]
+  }
+}

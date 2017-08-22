@@ -1,0 +1,3 @@
+- sessionMiddleware should be placed after routerEnhancer in order to catch all events
+- access control does not apply to login and logout routes
+- `changeRoute('logout')` does never hit reducer, instead logout procedure is performed and user is redirected to `logoutRedirect` (default: `login`).
