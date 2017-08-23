@@ -4,9 +4,10 @@ import createActions from './createActions.js'
 
 const defaults = {
   storeKey: 'session',
-  redirectAfterLogin: 'home',
+  redirectUnauthorized: true,
+  redirectAfterLogin: 'home', // false, string, object
   dynamicRedirect: true, // after successful login, should previous route be activated again?
-  redirectAfterLogout: 'login',
+  redirectAfterLogout: 'login', // false, string, object
   instantLogout: true,
   defaultUser: {
     role: 'visitor', // mandatory

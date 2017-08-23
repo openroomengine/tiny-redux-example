@@ -10,21 +10,30 @@ const mapStateToProps = (state) => ({
   route: state.route.current.id,
 })
 
-@connect(mapStateToProps)
+const mapDispatchToProps = (dispatch) => ({
+  login: () => dispatch(sessionActions.login({
+    role: 'admin',
+    username: 'ab',
+    password: 'b',
+  })),
+  logout: () => dispatch(sessionActions.logout()),
+})
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class AppContainer extends React.Component {
   render () {
-    const {route, dispatch} = this.props
+    const {route, login, logout} = this.props
 
     let page = null
 
     switch (route) {
       case 'login': {
-        page = <div onClick={(e) => dispatch(sessionActions.login({role: 'admin'}))}>login</div>
+        page = <div onClick={(e) => login()}>login</div>
         break
       }
 
       case 'logout': {
-        page = <div onClick={(e) => dispatch(sessionActions.logout())}>logout</div>
+        page = <div onClick={(e) => logout()}>logout</div>
         break
       }
 
@@ -35,6 +44,11 @@ export default class AppContainer extends React.Component {
 
       case 'rooms': {
         page = <div>rooms</div>
+        break
+      }
+
+      case 'room': {
+        page = <div>room</div>
         break
       }
     }

@@ -5,7 +5,18 @@ import reducers from './reducers/'
 import {routerEnhancer} from './router.js'
 import {sessionMiddleware} from './session.js'
 
-const middleware = [sessionMiddleware]
+const logErrors = store => next => action => {
+  if (action.error) {
+    const error = action.payload
+    console.log(error instanceof Error)
+    console.log(error.name, error.httpStatus)
+    console.error(error)
+  }
+
+  next(action)
+}
+
+const middleware = [sessionMiddleware, logErrors]
 
 const store = createStore(
   reducers,

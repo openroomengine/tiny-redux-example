@@ -1,5 +1,2 @@
-- createRouter -> enableRouter
 - store username on login_init?
-- option to disable redirecting (ignore changeRoute?)
-- sessionMiddleware functions don't rely on context (pass args)
-- only attempt logout when a user is logged in
+- way to handle session termination by server (401)

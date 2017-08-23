@@ -1,18 +1,52 @@
-import enableSessions from './session/'
+import enableSessions, {ServerError} from './session/'
 import {changeRoute} from './router.js'
 
-const performLogin = async (user) => { // user from LOGIN action.payload
-  // promise returns object that should be stored as user state
+const performLogin = async (user) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+    credentials: 'include',
+    body: JSON.stringify({
+      username: user.username,
+      password: user.password,
+    }),
+  }
+
+  const res = await fetch('http://localhost:8080/login', options)
+
+  // throw if login did not successfully complete
+  if (res.status !== 200) throw new ServerError(res)
+
+  // don't keep sensitive info in store
+  delete user.password
+
+  // stored under session.user
   return user
 }
 
-const performLogout = async (user) => { // user from state
-  // session does not care about value of fulfilled promise
+const performLogout = async (user) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+    credentials: 'include',
+  }
+
+  const res = await fetch('http://localhost:8080/logout', options)
+
+  // throw if logout did not successfully complete
+  if (res.status !== 200) throw new ServerError(res)
 }
 
 const options = {
   redirectAfterLogin: 'dashboard',
-  // instantLogout: false,
+  defaultUser: {
+    role: 'visitor',
+    username: null,
+  },
 }
 
 const {

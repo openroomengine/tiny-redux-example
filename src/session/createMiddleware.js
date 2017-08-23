@@ -1,8 +1,11 @@
-export default (performLogin, performLogout, actions, options) => store => next => action => {
-  const session = store.getState()[options.storeKey]
+export default (performLogin, performLogout, actions, options) => ({dispatch, getState}) => next => action => {
+  const session = getState()[options.storeKey]
 
   // LOGIN
   const login = () => {
+    // swallow LOGIN when already logged in
+    if (session.loggedIn) return
+
     const user = action.payload
 
     loginInit()
@@ -22,21 +25,27 @@ export default (performLogin, performLogout, actions, options) => store => next 
   const loginSuccess = (user) => {
     next(actions.loginSuccess(user))
 
+    // redirect after login
     if (options.redirectAfterLogin) {
       let redirect =
         (options.dynamicRedirect && session.redirect) ||
         options.redirectAfterLogin
 
-      if (typeof redirect === 'string') redirect = [redirect]
+      if (typeof redirect === 'string') redirect = {id: redirect}
 
-      console.log(redirect)
-
-      next(actions.changeRoute(...redirect))
+      dispatch(actions.changeRoute(
+        redirect.id,
+        redirect.keys,
+        redirect.redirect,
+      ))
     }
   }
 
   // LOGOUT
   const logout = () => {
+    // swallow LOGOUT when not logged in
+    if (!session.loggedIn) return
+
     logoutInit()
     performLogout(session.user)
       .then(() => logoutSuccess())
@@ -54,12 +63,17 @@ export default (performLogin, performLogout, actions, options) => store => next 
   const logoutSuccess = () => {
     next(actions.logoutSuccess())
 
+    // redirect after logout
     if (options.redirectAfterLogout) {
       let redirect = options.redirectAfterLogout
 
-      if (typeof redirect === 'string') redirect = [redirect]
+      if (typeof redirect === 'string') redirect = {id: redirect}
 
-      next(actions.changeRoute(...redirect))
+      dispatch(actions.changeRoute(
+        redirect.id,
+        redirect.keys,
+        redirect.redirect,
+      ))
     }
   }
 
@@ -70,10 +84,13 @@ export default (performLogin, performLogout, actions, options) => store => next 
     // instant logout
     if (options.instantLogout && nextRoute.id === 'logout') return logout()
 
+    // swallow CHANGE_ROUTE login when already logged in
+    if (nextRoute.id === 'login' && session.loggedIn) return
+
     // access allowed
     if (
+      !options.redirectUnauthorized ||
       nextRoute.id === 'login' ||
-      // nextRoute.id === 'logout' ||
       nextRoute.roles.includes(session.user.role)
     ) return next(action)
 
@@ -81,13 +98,17 @@ export default (performLogin, performLogout, actions, options) => store => next 
     next(actions.changeRoute(
       'login',
       null,
-      [nextRoute.id, nextRoute.keys, nextRoute.redirect],
+      {
+        id: nextRoute.id,
+        keys: nextRoute.keys,
+        redirect: nextRoute.redirect,
+      },
     ))
   }
 
   // LISTEN TO ACTIONS
   if (action.type === options.CHANGE_ROUTE) accessControl()
   else if (action.type === options.LOGIN) login()
-  else if (action.type === options.LOGOUT) logout() // and logged in
+  else if (action.type === options.LOGOUT) logout()
   else next(action)
 }
