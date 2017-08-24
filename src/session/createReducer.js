@@ -3,7 +3,6 @@ export default (options) => {
     loggedIn: false,
     loggingIn: false,
     loggingOut: false,
-    redirect: null,
     user: options.defaultUser,
   }
 
@@ -55,20 +54,15 @@ export default (options) => {
         }
       }
 
-      case options.CHANGE_ROUTE: {
-        const {redirect} = action.payload
-
+      case options.DESTROY_SESSION: {
         return {
           ...sessionState,
-          redirect,
+          loggedIn: false,
+          loggingIn: false,
+          loggingOut: false,
+          user: options.defaultUser,
         }
       }
-
-      // case options.UNAUTHORIZED: {
-      //   return {
-      //     ...sessionState,
-      //   }
-      // }
 
       default: {
         return sessionState

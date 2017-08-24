@@ -1,2 +1,8 @@
-- store username on login_init?
-- way to handle session termination by server (401)
+# Todo
+- test session persistence (outside of package)
+- test store reset(outside of package)
+
+- message bus
+
+## Long term
+- put routes in store

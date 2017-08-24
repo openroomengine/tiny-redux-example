@@ -10,8 +10,8 @@ const createLink = (routes, changeRoute, options) => (Child) => {
       : route.current.id === id && compareKeys(route.current.keys, keys),
   })
 
-  const mapDispatchToProps = (dispatch, {id, keys, href}) => ({
-    changeRoute: () => dispatch(changeRoute(id, keys, href)),
+  const mapDispatchToProps = (dispatch, {id, keys, redirect}) => ({
+    changeRoute: () => dispatch(changeRoute(id, keys, redirect)),
   })
 
   @connect(mapStateToProps, mapDispatchToProps)
@@ -52,12 +52,11 @@ const createLink = (routes, changeRoute, options) => (Child) => {
     }
 
     render () {
-      const {children, active, href, linkProps} = this.props
+      const {children, active, linkProps} = this.props
 
       return (
         <Child
           {...linkProps}
-          href={href}
           active={active}
           onClick={this.handleClick}
           nativeRef={this.nativeRefCallback}
@@ -70,7 +69,6 @@ const createLink = (routes, changeRoute, options) => (Child) => {
     static propTypes = {
       children: PropTypes.node.isRequired,
       linkProps: PropTypes.object.isRequired,
-      href: PropTypes.string.isRequired,
       changeRoute: PropTypes.func.isRequired,
       active: PropTypes.bool.isRequired,
       nativeRef: PropTypes.func,
@@ -79,7 +77,7 @@ const createLink = (routes, changeRoute, options) => (Child) => {
 
   // MAPLINKPROPS
   // hoc for Link renames and groups props
-  const MapLinkProps = ({to, matchRoute, children, nativeRef, ...linkProps}) => {
+  const MapLinkProps = ({to, redirect, matchRoute, children, nativeRef, ...linkProps}) => {
     // route id
     const id = to
 
@@ -100,13 +98,13 @@ const createLink = (routes, changeRoute, options) => (Child) => {
       : null
 
     // href
-    const href = route.resolve(keys)
+    linkProps.href = route.resolve(keys)
 
     return (
       <Link
         id={id}
         keys={keys}
-        href={href}
+        redirect={redirect}
         linkProps={linkProps}
         matchRoute={matchRoute}
         nativeRef={nativeRef}
@@ -121,6 +119,14 @@ const createLink = (routes, changeRoute, options) => (Child) => {
     to: PropTypes.oneOf(Object.keys(routes)).isRequired,
     matchRoute: PropTypes.bool,
     nativeRef: PropTypes.func,
+    redirect: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        id: PropTypes.oneOf(Object.keys(routes)).isRequired,
+        keys: PropTypes.objectOf(PropTypes.string),
+        // redirect, but no one is ever going to next it
+      }),
+    ]),
   }
 
   return MapLinkProps

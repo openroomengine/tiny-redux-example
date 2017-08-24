@@ -53,10 +53,14 @@ const {
   sessionMiddleware,
   sessionReducer,
   sessionActions,
+  authorize,
+  Authorize,
 } = enableSessions(performLogin, performLogout, changeRoute, options)
 
 export {
   sessionMiddleware,
   sessionReducer,
   sessionActions,
+  authorize,
+  Authorize,
 }

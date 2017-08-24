@@ -16,10 +16,12 @@ export default (routeDefs, options) => {
 
   const routes = createRoutes(routeDefs, options)
 
+  console.log(routes)
+
   const changeRoute = (id, inputKeys = null, redirect = null) => {
     // NOTE: router does not implement any kind of redirect functionality,
     // param there so other packages can implement it using this action creator
-    // redirect should either be a route id (string) or object with changeRoute arguments
+    // redirect should be null or an object with changeRoute arguments (id, keys, redirect)
     const route = routes[id]
 
     const payload = {

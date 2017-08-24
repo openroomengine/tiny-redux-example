@@ -29,5 +29,8 @@ export default (changeRoute, options) => ({
   logoutSuccess: () => ({
     type: options.LOGOUT_SUCCESS,
   }),
+  destroySession: () => ({
+    type: options.DESTROY_SESSION,
+  }),
   changeRoute,
 })
