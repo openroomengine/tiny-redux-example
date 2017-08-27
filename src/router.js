@@ -1,4 +1,5 @@
-import enableRouter from './router/'
+// import enableRouter from '../../tiny-redux-router/'
+import enableRouter from 'tiny-redux-router'
 
 import {CHANGE_ROUTE} from './actions/actionTypes.js'
 

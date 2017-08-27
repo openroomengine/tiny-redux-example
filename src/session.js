@@ -1,4 +1,5 @@
-import enableSessions, {ServerError} from './session/'
+// import enableSessions, {ServerError} from '../../tiny-redux-sessions'
+import enableSessions, {ServerError} from 'tiny-redux-sessions'
 import {changeRoute} from './router.js'
 
 const performLogin = async (user) => {

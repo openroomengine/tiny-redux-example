@@ -1,3 +1,0 @@
-- navigation mandatory happens with route ids (key of route definitions object)
-  - parsePath should only be used because the browser adress bar has no notion of route ids
-- route id `null`: no route did match

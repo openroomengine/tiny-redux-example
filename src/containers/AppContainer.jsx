@@ -11,11 +11,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  login: () => dispatch(sessionActions.login({
+  login: (username, password) => dispatch(sessionActions.login({
     role: 'admin',
     persist: 'session',
-    username: 'b',
-    password: 'b',
+    username,
+    password,
   })),
   logout: () => dispatch(sessionActions.logout()),
   destroySession: () => dispatch(sessionActions.destroySession()),
@@ -30,7 +30,12 @@ export default class AppContainer extends React.Component {
 
     switch (route) {
       case 'login': {
-        page = <div onClick={(e) => login()}>login</div>
+        page = (
+          <div>
+            <p onClick={(e) => login('a', 'a')}>login A</p>
+            <p onClick={(e) => login('b', 'b')}>login B</p>
+          </div>
+        )
         break
       }
 
