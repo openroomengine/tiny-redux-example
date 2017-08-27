@@ -44,7 +44,6 @@ const performLogout = async (user) => {
 const options = {
   redirectAfterLogin: 'dashboard',
   defaultUser: {
-    role: 'visitor',
     username: null,
   },
 }

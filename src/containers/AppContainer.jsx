@@ -13,6 +13,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   login: () => dispatch(sessionActions.login({
     role: 'admin',
+    persist: 'session',
     username: 'b',
     password: 'b',
   })),

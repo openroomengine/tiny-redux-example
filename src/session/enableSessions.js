@@ -19,9 +19,14 @@ const defaults = {
   // (used to determine whether LOGIN after DESTROY_SESSION should redirect or not)
   defaultUser: {
     role: 'visitor', // mandatory
+    persist: null, // mandatory
+    // false: do not persist user; each refresh requires new login
+    // session: store user in browser's sessionStorage (if available); stay logged in until browser closes (or until LOGOUT or DESTROY_SESSION)
+    // local: store user in browser's localStorage (if available); stay logged in until LOGOUT or DESTROY_SESSION (NOTE: certain browser settings may cause your browser to clear localStorage when closed)
   },
   getSession: (state) => state.session,
   getCurrentRoute: (state) => state.route.current,
+  storageKey: 'user',
 
   // action types
   LOGIN: 'LOGIN',
@@ -37,6 +42,7 @@ const defaults = {
 
 export default (performLogin, performLogout, changeRoute, options) => {
   options = {...defaults, ...options}
+  options.defaultUser = {...defaults.defaultUser, ...options.defaultUser}
 
   // extract changeRoute type
   if (!options.CHANGE_ROUTE) options.CHANGE_ROUTE = changeRoute().type
