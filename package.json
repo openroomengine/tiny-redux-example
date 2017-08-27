@@ -1,6 +1,10 @@
 {
-  "name": "router",
+  "name": "tiny-redux-example",
   "version": "1.0.0",
+  "description": "Tiny-redux-* sandbox",
+  "repository": "https://github.com/openroomengine/tiny-redux-example",
+  "author": "c0d0g3n <c0d0g3n@gmail.com> (https://github.com/c0d0g3n)",
+  "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack -p"
